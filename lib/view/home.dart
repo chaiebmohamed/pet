@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,12 +11,11 @@ import 'package:pet/model/pet.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var x = 5;
-    petController controller = Get.put(petController());
+    PetController controller = Get.put(PetController());
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("pets"),
+        title: const Text("add pet"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -43,13 +44,13 @@ class Home extends StatelessWidget {
                 onPressed: () {
                   controller.getImage(ImageSource.camera);
                 },
-                child: Text("Camera"),
+                child: const Text("Camera"),
               ),
               RaisedButton(
                 onPressed: () {
                   controller.getImage(ImageSource.gallery);
                 },
-                child: Text("Gallery"),
+                child: const Text("Gallery"),
               ),
               const SizedBox(
                 height: 10,
@@ -87,7 +88,7 @@ class Home extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              field("status", controller.Status),
+              field("status", controller.status),
               const SizedBox(
                 height: 10,
               ),
@@ -111,7 +112,7 @@ class Home extends StatelessWidget {
                       name: controller.name.text,
                       photoUrls: controller.imageList,
                       tags: controller.taglist,
-                      status: controller.Status.text)),
+                      status: controller.status.text)),
                   child: const Text(
                     'post the pet ',
                     style: TextStyle(

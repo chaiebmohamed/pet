@@ -1,19 +1,18 @@
 import 'package:get/get.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pet/model/pet.dart';
 import 'package:pet/service/petservice.dart';
 import 'package:image_picker/image_picker.dart';
 
-class petController extends GetxController {
+class PetController extends GetxController {
   TextEditingController id = TextEditingController();
   TextEditingController categoryId = TextEditingController();
   TextEditingController categoryName = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController tagsId = TextEditingController();
   TextEditingController tagsName = TextEditingController();
-  TextEditingController Status = TextEditingController();
+  TextEditingController status = TextEditingController();
+  TextEditingController additionalMetadata = TextEditingController();
   var imageList = <String>[].obs;
   var taglist = <Category>[].obs;
 
@@ -23,6 +22,7 @@ class petController extends GetxController {
   var p = Pet().obs;
 
   void getImage(ImageSource imageSource) async {
+    // ignore: deprecated_member_use
     final pickedfile = await ImagePicker().getImage(source: imageSource);
 
     if (pickedfile != null) {
@@ -42,12 +42,12 @@ class petController extends GetxController {
   }
 
   postPet(Pet pet) async {
-    var response = await petService.postPet(pet);
+    var response = await PetService.postPet(pet);
     if (response != null) {
       p.value = pet;
       Get.snackbar('done', "pet added successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Color.fromARGB(255, 0, 119, 255),
+          backgroundColor: const Color.fromARGB(255, 0, 119, 255),
           colorText: Colors.white);
     } else {
       Get.snackbar('error', "there is something wrong",
@@ -58,12 +58,12 @@ class petController extends GetxController {
   }
 
   updatePet(Pet pet) async {
-    var response = await petService.putPet(pet);
+    var response = await PetService.putPet(pet);
     if (response != null) {
       p.value = pet;
-      Get.snackbar('done', "pet added successfully",
+      Get.snackbar('done', "pet updated  successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Color.fromARGB(255, 0, 119, 255),
+          backgroundColor: const Color.fromARGB(255, 0, 119, 255),
           colorText: Colors.white);
     } else {
       Get.snackbar('error', "there is something wrong",
@@ -72,4 +72,8 @@ class petController extends GetxController {
           colorText: Colors.white);
     }
   }
+
+  /*AddImageId(int id, String data, String imagepath) async {
+    final file = File(selectedImagePath.value, selectedImagePath.value);
+  }*/
 }
