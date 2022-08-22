@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet/model/pet.dart';
 
@@ -41,24 +42,27 @@ class PetService {
     }
   }
 
-  static Future<String> uploadImage(
+  static Future<bool> uploadImage(
     int id,
     String data,
-    File image,
+    Image image,
   ) async {
     var map = <String, dynamic>{};
-    map["id"] = id;
-    map["additionalMetadata"] = data;
-    map["file"] = image;
+    map['id'] = id;
+    map['additionalMetadata'] = data;
+    map['file'] = image;
 
     var response = await http.post(
         Uri.parse("https://petstore.swagger.io/v2/pet/$id/uploadImage"),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         body: map);
 
     if (response.statusCode == 200) {
-      return "successful operation";
+      return true;
     } else {
-      return "Error: response status is 500";
+      return false;
     }
   }
 }

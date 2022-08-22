@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:pet/model/pet.dart';
@@ -27,6 +29,20 @@ class PetController extends GetxController {
 
     if (pickedfile != null) {
       imageList.add(pickedfile.path);
+    } else {
+      Get.snackbar('error', "no image selected",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
+  void updateImage(ImageSource imageSource) async {
+    // ignore: deprecated_member_use
+    final pickedfile = await ImagePicker().getImage(source: imageSource);
+
+    if (pickedfile != null) {
+      selectedImagePath.value = pickedfile.path;
     } else {
       Get.snackbar('error', "no image selected",
           snackPosition: SnackPosition.BOTTOM,
@@ -73,7 +89,20 @@ class PetController extends GetxController {
     }
   }
 
-  /*AddImageId(int id, String data, String imagepath) async {
-    final file = File(selectedImagePath.value, selectedImagePath.value);
-  }*/
+  addImageId(int id, String data, String imagepath) async {
+    final image = Image.file(File(imagepath));
+
+    var response = await PetService.uploadImage(id, data, image);
+    if (response == true) {
+      Get.snackbar('done', "successful operation",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: const Color.fromARGB(255, 0, 119, 255),
+          colorText: Colors.white);
+    } else {
+      Get.snackbar('error', "Error: response status is 500",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
 }
