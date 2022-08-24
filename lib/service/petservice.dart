@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart';
 import 'package:pet/model/pet.dart';
+// ignore: depend_on_referenced_packages
+import 'package:http_parser/http_parser.dart';
 
 class PetService {
   static Future<Pet?> postPet(Pet pet) async {
@@ -42,26 +44,30 @@ class PetService {
     }
   }
 
+  //add form data
   static Future<bool> uploadImage(
     int id,
     String data,
-    Image image,
+    String image,
   ) async {
-    var map = <String, dynamic>{};
-    map['id'] = id;
-    map['additionalMetadata'] = data;
-    map['file'] = image;
+    final imageUploadRequest = http.MultipartRequest('POST',
+        Uri.parse('https://petstore.swagger.io/v2/pet/$id/uploadImage'));
+    //final mineTypeData = lookupMimeType(image, headerBytes: [0xFF])?.split('/');
+    final file = await http.MultipartFile.fromPath(
+      'file',
+      image,
+    );
+    imageUploadRequest.files.add(file);
+    imageUploadRequest.fields["petId"] = id.toString();
+    imageUploadRequest.fields["additionalMetadata"] = data;
 
-    var response = await http.post(
-        Uri.parse("https://petstore.swagger.io/v2/pet/$id/uploadImage"),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: map);
-
+    final streamedResponse = await imageUploadRequest.send();
+    final response = await http.Response.fromStream(streamedResponse);
     if (response.statusCode == 200) {
       return true;
     } else {
+      print(imageUploadRequest.fields);
+
       return false;
     }
   }

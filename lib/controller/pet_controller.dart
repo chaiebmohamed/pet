@@ -90,9 +90,10 @@ class PetController extends GetxController {
   }
 
   addImageId(int id, String data, String imagepath) async {
-    final image = Image.file(File(imagepath));
+    //final image = Image.file(File(imagepath));
 
-    var response = await PetService.uploadImage(id, data, image);
+    var response = await PetService.uploadImage(id, data, imagepath);
+
     if (response == true) {
       Get.snackbar('done', "successful operation",
           snackPosition: SnackPosition.BOTTOM,
