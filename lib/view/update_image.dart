@@ -54,7 +54,7 @@ class UpdateImage extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () => controller.addImageId(
-                    5,
+                    int.parse(controller.id.text),
                     controller.additionalMetadata.text,
                     controller.selectedImagePath.value),
                 child: const Text(
