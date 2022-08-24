@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:mime/mime.dart';
 import 'package:pet/model/pet.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
@@ -66,8 +65,49 @@ class PetService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      print(imageUploadRequest.fields);
+      return false;
+    }
+  }
 
+  static Future<List<Pet>?> finPetByStatus(String ch) async {
+    var response = await http.get(
+      Uri.parse(
+          "https://petstore.swagger.io/v2/pet/findByStatus?status=available,pending,sold"),
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+      return petFromJsonList(response.body);
+    }
+  }
+
+  static Future<Pet?> findPetById(int x) async {
+    var response = await http
+        .get(Uri.parse("https://petstore.swagger.io/v2/pet/$x"), headers: {
+      'Accept': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      return petFromJson(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  static UpdatePetWithId(int id, String name, String status) async {
+    final changeing = http.MultipartRequest(
+        'POST', Uri.parse('https://petstore.swagger.io/v2/pet/$id'));
+
+    changeing.fields["name"] = name;
+    changeing.fields["status"] = status;
+
+    final streamedResponse = await changeing.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
       return false;
     }
   }
