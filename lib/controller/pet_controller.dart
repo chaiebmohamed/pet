@@ -144,6 +144,7 @@ class PetController extends GetxController {
 
   updatePetById(int id, String name, String status) async {
     var response = await PetService.UpdatePetWithId(id, name, status);
+    print(response);
     if (response == true) {
       Get.snackbar('done', "pet updated ! ",
           snackPosition: SnackPosition.BOTTOM,
@@ -151,6 +152,26 @@ class PetController extends GetxController {
           colorText: Colors.white);
     } else {
       Get.snackbar('error', "Invalid input",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
+  deletPetById(int id) async {
+    var response = await PetService.deletPetById(id);
+    if (response == 200) {
+      Get.snackbar('done', "pet deleted ! ",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    } else if (response == 400) {
+      Get.snackbar('done', "Invalid ID supplied ! ",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    } else {
+      Get.snackbar('error', "Pet not found ! ",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white);

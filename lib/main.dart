@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pet/view/find_pet_by_id.dart';
+import 'package:pet/view/update_pet_by_id.dart';
 
 import 'view/select_by_status.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FindPetById(),
+      home: UpdatePetById(),
     );
   }
 }

@@ -98,17 +98,28 @@ class PetService {
 
   static UpdatePetWithId(int id, String name, String status) async {
     final changeing = http.MultipartRequest(
-        'POST', Uri.parse('https://petstore.swagger.io/v2/pet/$id'));
+        'POST', Uri.parse('https://petstore.swagger.io/v2/pet/3'));
 
     changeing.fields["name"] = name;
     changeing.fields["status"] = status;
 
     final streamedResponse = await changeing.send();
     final response = await http.Response.fromStream(streamedResponse);
+
+    print(changeing.fields);
+
     if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
+  }
+
+  static deletPetById(int id) async {
+    var response = await http.delete(
+        Uri.parse("https://petstore.swagger.io/v2/pet/$id"),
+        headers: {'Accept': 'application/json', 'api_key': 'mouha'});
+
+    return response.statusCode;
   }
 }
